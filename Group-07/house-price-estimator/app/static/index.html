@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Price Estimator</title>
+<style>
+  :root { --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --brand:#2563eb; --bg:#f9fafb; --bad:#b91c1c; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color:var(--ink); background:var(--bg); }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { margin: 0 0 4px; font-size: 1.8rem; }
+  .sub { margin: 0 0 20px; color: var(--muted); }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .presets { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  .presets span { color:var(--muted); font-size:.9rem; }
+  .chip { border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 12px; cursor:pointer; font-size:.9rem; }
+  .chip:hover { border-color: var(--brand); color: var(--brand); }
+  .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:14px 16px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  label { display:flex; flex-direction:column; gap:4px; }
+  .lbl { font-weight:600; font-size:.95rem; }
+  .hint { color:var(--muted); font-size:.8rem; }
+  input { padding:9px 10px; border:1px solid #d1d5db; border-radius:8px; font-size:1rem; }
+  input:focus { outline:2px solid var(--brand); border-color:transparent; }
+  button.primary { margin-top:18px; width:100%; padding:12px; border:0; border-radius:10px; background:var(--brand); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; }
+  button.primary:disabled { opacity:.6; cursor:wait; }
+  .error { white-space:pre-line; background:#fef2f2; border:1px solid #fecaca; color:var(--bad); border-radius:10px; padding:12px 14px; margin-bottom:20px; }
+  .price { font-size:2.4rem; font-weight:700; margin:0; }
+  .range { margin:4px 0 16px; color:var(--muted); }
+  .bar { position:relative; height:12px; background:#e5e7eb; border-radius:999px; }
+  .fill { position:absolute; top:0; height:100%; background:#93c5fd; border-radius:999px; }
+  .marker { position:absolute; top:-4px; width:4px; height:20px; background:var(--brand); border-radius:2px; transform:translateX(-2px); }
+  .scale { display:flex; justify-content:space-between; font-size:.8rem; color:var(--muted); margin-top:6px; }
+  .note { color:var(--muted); font-size:.85rem; line-height:1.5; }
+</style>
+</head>
+<body>
+<main>
+  <h1>House Price Estimator</h1>
+  <p class="sub">Estimate the typical house value for a California neighbourhood, with a 90% prediction range.</p>
+
+  <div class="card">
+    <div class="presets">
+      <span>Try sample inputs:</span>
+      <button type="button" class="chip" data-preset="sf">San Francisco area</button>
+      <button type="button" class="chip" data-preset="la">Los Angeles area</button>
+      <button type="button" class="chip" data-preset="fresno">Fresno area</button>
+    </div>
+    <form id="form">
+      <div class="grid" id="fields"></div>
+      <button type="submit" class="primary" id="submitBtn">Estimate price</button>
+    </form>
+  </div>
+
+  <div id="error" class="error" hidden></div>
+
+  <section id="result" class="card" hidden>
+    <p class="price" id="price"></p>
+    <p class="range" id="range"></p>
+    <div class="bar"><div class="fill" id="fill"></div><div class="marker" id="marker"></div></div>
+    <div class="scale"><span>$0</span><span>$500,000</span></div>
+    <p class="note" id="resultNote"></p>
+  </section>
+
+  <p class="note">
+    The model was trained on the California Housing dataset (1990 census), so the prices reflect 1990 values,
+    not today's market, and only cover values below $500,000. The range is a statistical estimate
+    (split conformal prediction), not financial advice.
+  </p>
+</main>
+
+<script>
+  const FIELDS = [
+    { key: "MedInc",     label: "Median income",     hint: "in $10,000s (3.5 = $35,000)",        min: 0.1,    max: 15,     step: 0.1,  value: 3.5 },
+    { key: "HouseAge",   label: "House age (years)", hint: "median age of houses, 1 to 52",      min: 1,      max: 52,     step: 1,    value: 20 },
+    { key: "AveRooms",   label: "Average rooms",     hint: "per household, up to 20",            min: 1,      max: 20,     step: 0.1,  value: 5 },
+    { key: "AveBedrms",  label: "Average bedrooms",  hint: "per household, up to 5",             min: 0.5,    max: 5,      step: 0.1,  value: 1 },
+    { key: "Population", label: "Block population",  hint: "people in the block, up to 10,000",  min: 1,      max: 10000,  step: 1,    value: 1200 },
+    { key: "AveOccup",   label: "Average occupants", hint: "people per household, up to 10",     min: 1,      max: 10,     step: 0.1,  value: 3 },
+    { key: "Latitude",   label: "Latitude",          hint: "32.5 to 42.0",                       min: 32.5,   max: 42,     step: 0.01, value: 34.05 },
+    { key: "Longitude",  label: "Longitude",         hint: "-124.5 to -114.0",                   min: -124.5, max: -114,   step: 0.01, value: -118.25 }
+  ];
+
+  const PRESETS = {
+    sf:     { MedInc: 5.5, HouseAge: 35, AveRooms: 5.0, AveBedrms: 1.1, Population: 1500, AveOccup: 2.5, Latitude: 37.77, Longitude: -122.42 },
+    la:     { MedInc: 3.5, HouseAge: 25, AveRooms: 4.5, AveBedrms: 1.0, Population: 2000, AveOccup: 3.2, Latitude: 34.05, Longitude: -118.25 },
+    fresno: { MedInc: 2.5, HouseAge: 20, AveRooms: 5.0, AveBedrms: 1.1, Population: 1200, AveOccup: 3.0, Latitude: 36.74, Longitude: -119.79 }
+  };
+
+  const form = document.getElementById("form");
+  const grid = document.getElementById("fields");
+  const btn = document.getElementById("submitBtn");
+  const errorBox = document.getElementById("error");
+  const resultBox = document.getElementById("result");
+
+  // Build the input fields
+  FIELDS.forEach(f => {
+    const label = document.createElement("label");
+    label.innerHTML =
+      `<span class="lbl">${f.label}</span>` +
+      `<input type="number" id="${f.key}" name="${f.key}" min="${f.min}" max="${f.max}" step="${f.step}" value="${f.value}" required>` +
+      `<span class="hint">${f.hint}</span>`;
+    grid.appendChild(label);
+  });
+
+  // Sample-input buttons
+  document.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const p = PRESETS[chip.dataset.preset];
+      Object.keys(p).forEach(k => { document.getElementById(k).value = p[k]; });
+    });
+  });
+
+  // Prices come back in units of $100,000; show whole dollars rounded to the nearest $1,000
+  const usd = n => new Intl.NumberFormat("en-US", {
+    style: "currency", currency: "USD", maximumFractionDigits: 0
+  }).format(Math.round((n * 100000) / 1000) * 1000);
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.hidden = false;
+    resultBox.hidden = true;
+  }
+
+  function formatError(data) {
+    if (data && Array.isArray(data.detail)) {
+      return "Please check these values:\n" + data.detail.map(d => {
+        const field = d.loc && d.loc.length ? d.loc[d.loc.length - 1] : "input";
+        return `- ${field}: ${d.msg}`;
+      }).join("\n");
+    }
+    return "Something went wrong. Please try again.";
+  }
+
+  function showResult(d) {
+    const pct = Math.round(d.confidence_level * 100);
+    const SCALE = 5.0; // bar runs from $0 to $500,000
+    const pos = v => Math.max(0, Math.min(100, (v / SCALE) * 100));
+
+    document.getElementById("price").textContent = usd(d.prediction);
+    document.getElementById("range").textContent = `${pct}% range: ${usd(d.lower)} to ${usd(d.upper)}`;
+
+    const fill = document.getElementById("fill");
+    fill.style.left = pos(d.lower) + "%";
+    fill.style.width = (pos(d.upper) - pos(d.lower)) + "%";
+    document.getElementById("marker").style.left = pos(d.prediction) + "%";
+
+    document.getElementById("resultNote").textContent =
+      `About ${pct} out of 100 similar neighbourhoods should have a typical house value inside this range. ` +
+      `A wide range means the model is less certain.`;
+
+    errorBox.hidden = true;
+    resultBox.hidden = false;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+    resultBox.hidden = true;
+
+    const body = {};
+    FIELDS.forEach(f => { body[f.key] = parseFloat(document.getElementById(f.key).value); });
+
+    btn.disabled = true;
+    btn.textContent = "Estimating...";
+    try {
+      const res = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) { showError(formatError(data)); return; }
+      showResult(data);
+    } catch (err) {
+      showError("Could not reach the server. Is it running?");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Estimate price";
+    }
+  });
+</script>
+</body>
+</html>

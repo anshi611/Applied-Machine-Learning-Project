@@ -1,0 +1,47 @@
+{
+  "cleaning": {
+    "Price at cap (>= 5.0)": {
+      "rows_flagged": 992,
+      "share_%": 4.81
+    },
+    "AveRooms > 20": {
+      "rows_flagged": 69,
+      "share_%": 0.33
+    },
+    "AveBedrms > 5": {
+      "rows_flagged": 45,
+      "share_%": 0.22
+    },
+    "AveOccup > 10": {
+      "rows_flagged": 37,
+      "share_%": 0.18
+    },
+    "Population > 10000": {
+      "rows_flagged": 23,
+      "share_%": 0.11
+    }
+  },
+  "point_models": {
+    "LinearRegression": {
+      "RMSE": 0.6014,
+      "MAE": 0.4473,
+      "R2": 0.6202
+    },
+    "RandomForest": {
+      "RMSE": 0.4739,
+      "MAE": 0.3162,
+      "R2": 0.7641
+    },
+    "GradientBoosting": {
+      "RMSE": 0.4398,
+      "MAE": 0.2998,
+      "R2": 0.7969
+    }
+  },
+  "intervals": {
+    "target_coverage": 0.9,
+    "empirical_coverage_on_test": 0.8985915492957747,
+    "half_width_q": 0.6579489114534254,
+    "mean_interval_width": 1.3141950711223953
+  }
+}
