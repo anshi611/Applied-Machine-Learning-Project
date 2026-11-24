@@ -1,0 +1,133 @@
+===== download_data
+Already downloaded: C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\data\raw\telco_churn.csv
+===== preprocess
+Raw shape:   (7043, 21)
+Clean shape: (7043, 21)
+Missing values after cleaning: 0
+Churn rate: 26.5%
+Saved to C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\data\processed\telco_clean.csv
+===== train_classical
+  opt_res = optimize.minimize(
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+Train: 5634 rows | Test: 1409 rows | churn rate train=26.5% test=26.5%
+
+Logistic Regression  roc_auc=0.842  precision=0.505  recall=0.786  f1=0.615  cv_roc_auc_mean=0.846  cv_roc_auc_std=0.012
+Random Forest        roc_auc=0.846  precision=0.537  recall=0.794  f1=0.641  cv_roc_auc_mean=0.848  cv_roc_auc_std=0.011
+XGBoost              roc_auc=0.842  precision=0.522  recall=0.775  f1=0.624  cv_roc_auc_mean=0.845  cv_roc_auc_std=0.011
+
+Best model (highest test ROC-AUC): Random Forest
+Calibration (sigmoid): mean predicted churn 39.4% -> 26.7% (actual 26.5%), Brier 0.1580 -> 0.1363, ROC-AUC 0.8455 -> 0.8459
+
+Top 10 churn drivers (SHAP):
+  Contract = Month-to-month                0.093  (increases churn)
+  InternetService = Fiber optic            0.056  (increases churn)
+  tenure                                   0.053  (decreases churn)
+  Contract = Two year                      0.048  (decreases churn)
+  TotalCharges                             0.034  (decreases churn)
+  PaymentMethod = Electronic check         0.031  (increases churn)
+  MonthlyCharges                           0.030  (increases churn)
+  InternetService = No                     0.028  (decreases churn)
+  OnlineSecurity = Yes                     0.016  (decreases churn)
+  PaperlessBilling = Yes                   0.015  (increases churn)
+
+Saved model + results to C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\models and C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\results
+===== simulate_treatment
+=== SIMULATED treatment design (assumptions, not real data) ===
+
+Treated: 3527 (50.1%)   Control: 3516
+
+              customers  share  real_churn_rate  assumed_save_rate  assumed_backfire  churn_control  churn_treated  observed_uplift
+segment                                                                                                                            
+persuadable        1842  0.262            0.492               0.40              0.00          0.483          0.303            0.180
+m2m_other          1495  0.212            0.296               0.20              0.00          0.311          0.215            0.096
+lost_cause          712  0.101            0.492               0.05              0.00          0.468          0.486           -0.019
+contract           1731  0.246            0.074               0.05              0.00          0.071          0.075           -0.004
+sleeping_dog       1263  0.179            0.033               0.00              0.03          0.028          0.059           -0.031 
+
+Overall churn  control=0.260  treated=0.205  -> average offer effect = 0.055 (5.5 percentage points)
+===== plot_simulation
+Saved C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\results\figures\sim_design.png
+===== train_uplift
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+5-fold CV Qini on train (higher = better):
+  T-learner (Logistic Regression)     0.0487
+  T-learner (XGBoost)                 0.0408
+Chosen: T-learner (Logistic Regression)
+
+Test set: 1409 customers | top 20% = 282 | best possible saved = 94.9
+
+                                qini_auc observed_uplift_at_20 true_saved_top20
+T-learner (Logistic Regression)   0.0282                0.1086             50.9
+T-learner (XGBoost)               0.0304                0.1315             56.0
+Churn risk (Random Forest)          0.04                0.1271             58.2
+Random                            0.0019                0.0495             19.8 
+
+  T-learner (Logistic Regression)     top-20% segments: {'persuadable': 177, 'm2m_other': 88, 'lost_cause': 17}
+  T-learner (XGBoost)                 top-20% segments: {'persuadable': 187, 'm2m_other': 74, 'lost_cause': 21}
+  Churn risk (Random Forest)          top-20% segments: {'persuadable': 188, 'lost_cause': 56, 'm2m_other': 38}
+  Random                              top-20% segments: {'persuadable': 86, 'contract': 63, 'm2m_other': 58, 'sleeping_dog': 48, 'lost_cause': 27}
+
+Saved uplift model + results to C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\models and C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\results
+===== business_roi
+Assumptions: offer cost $50, customer value = MonthlyCharges x 12 months
+Test customers: 1409 (SIMULATED offer effect)
+
+method   Churn risk  Random  Uplift (T-learner)
+percent                                        
+10          25486.0  1623.0             17187.0
+20          37264.0  2383.0             28476.0
+30          40705.0  1844.0             37010.0
+40          42459.0  2967.0             41369.0
+50          39283.0  1916.0             37785.0
+60          33957.0  1237.0             33036.0
+70          26619.0   640.0             25422.0
+80          18441.0  -703.0             17331.0
+90           9435.0   -78.0              9762.0
+100          1168.0  1168.0              1168.0 
+
+- With a budget for the top 20% (282 customers), 'Churn risk' ranking gives the highest profit: $37,264 (ROI 264%) vs $28,476 for uplift and $2,383 for random targeting.
+- Most profitable overall: 'Churn risk' contacting the top 40% (profit $42,459). Contacting more than that REDUCES profit: extra offers go to customers who would stay anyway or who react badly.
+- Uplift ranking avoids 'lost causes' (high-risk customers the offer cannot save), but in this simulation churn risk already captures most of who responds, so it wins on profit.
+- Recommendation: target the highest churn-risk customers first, skip customers the uplift model flags as negative (likely to react badly), and run a real A/B test before trusting uplift scores, because the uplift effects here are simulated.
+
+Saved C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\results\roi_results.json and C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\backend\data\demo_customers.csv
+===== score_customers
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:451: OptimizeWarning: Unknown solver options: iprint
+  opt_res = optimize.minimize(
+  fold 1/5 scored
+  fold 2/5 scored
+  fold 3/5 scored
+  fold 4/5 scored
+  fold 5/5 scored
+  computing SHAP reasons (about a minute)...
+
+Saved 7,043 myDel customers -> C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\backend\data\mydel_customers.csv
+Saved campaign profit table -> C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\ml\results\mydel_roi.json
+method   Churn risk  Random  Uplift (T-learner)
+percent                                        
+10           121557    1585               70254
+20           180065    3644              130199
+30           201463    1591              164959
+40           207060    2896              182582
+50           192345    4950              181995
+60           163392   10417              159914
+70           128360    5195              122357
+80            85989    3241               82002
+90            41762     540               40342
+100            -227    -227                -227
+===== pytest
+  C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+11 passed, 1 warning in 5.82s
+
+[exited with code 0]

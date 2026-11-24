@@ -1,0 +1,16 @@
+# Backend-only dependencies (lighter than the root requirements.txt, used on Render).
+# scikit-learn / xgboost versions MUST match the versions used to train the
+# saved models, otherwise loading the .joblib files can fail.
+fastapi==0.163.1
+uvicorn[standard]==0.54.0
+pydantic==2.14.3
+pandas==3.1.1
+numpy==2.2.6
+scikit-learn==1.6.1
+xgboost==3.4.1
+joblib==1.6.0
+PyYAML==6.0.3
+
+# tests
+pytest==9.2.0
+httpx==0.28.1

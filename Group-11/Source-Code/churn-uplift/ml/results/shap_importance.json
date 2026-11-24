@@ -1,0 +1,80 @@
+{
+  "model": "Random Forest",
+  "top_features": [
+    {
+      "feature": "Contract = Month-to-month",
+      "mean_abs_shap": 0.0933,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "InternetService = Fiber optic",
+      "mean_abs_shap": 0.0557,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "tenure",
+      "mean_abs_shap": 0.0533,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "Contract = Two year",
+      "mean_abs_shap": 0.0476,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "TotalCharges",
+      "mean_abs_shap": 0.0336,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "PaymentMethod = Electronic check",
+      "mean_abs_shap": 0.0307,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "MonthlyCharges",
+      "mean_abs_shap": 0.0305,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "InternetService = No",
+      "mean_abs_shap": 0.0283,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "OnlineSecurity = Yes",
+      "mean_abs_shap": 0.0162,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "PaperlessBilling = Yes",
+      "mean_abs_shap": 0.0152,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "Contract = One year",
+      "mean_abs_shap": 0.0149,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "InternetService = DSL",
+      "mean_abs_shap": 0.0125,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "TechSupport = Yes",
+      "mean_abs_shap": 0.0111,
+      "direction": "decreases churn"
+    },
+    {
+      "feature": "StreamingTV = Yes",
+      "mean_abs_shap": 0.0103,
+      "direction": "increases churn"
+    },
+    {
+      "feature": "StreamingMovies = Yes",
+      "mean_abs_shap": 0.0101,
+      "direction": "increases churn"
+    }
+  ]
+}

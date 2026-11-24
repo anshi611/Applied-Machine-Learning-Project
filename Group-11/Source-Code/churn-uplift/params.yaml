@@ -1,0 +1,14 @@
+# Central configuration for the project.
+# Business values are ASSUMPTIONS (demo values). Change them here and re-run:
+#   python ml/business_roi.py
+
+business:
+  offer_cost: 50            # $ cost of one retention offer (e.g. one-month discount), paid for EVERY contacted customer
+  clv_months: 12            # value of keeping a customer = their MonthlyCharges x this many months
+  target_percents: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]   # campaign sizes to compare
+  headline_percent: 20      # "we can only contact the top 20%"
+
+decision:                   # rules used by POST /predict to recommend an action
+  low_risk_threshold: 0.30  # churn probability below this -> "no action needed"
+  backfire_margin: 0.02     # predicted uplift below MINUS this -> "do not contact".
+                            # Uplift within +/-0.02 of zero is model noise, not a real backfire.

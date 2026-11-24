@@ -1,0 +1,589 @@
+{
+  "simulated": true,
+  "note": "Treatment and its effect are SIMULATED (see ml/simulate_treatment.py).",
+  "chosen_uplift_model": "T-learner (Logistic Regression)",
+  "cv_qini_train": {
+    "T-learner (Logistic Regression)": 0.0487,
+    "T-learner (XGBoost)": 0.0408
+  },
+  "test_size": 1409,
+  "top_k": 0.2,
+  "k_customers": 282,
+  "best_possible_saved_top20": 94.9,
+  "methods": {
+    "T-learner (Logistic Regression)": {
+      "qini_auc": 0.0282,
+      "observed_uplift_at_20": 0.1086,
+      "true_saved_top20": 50.9,
+      "segments_top20": {
+        "persuadable": 177,
+        "m2m_other": 88,
+        "lost_cause": 17
+      }
+    },
+    "T-learner (XGBoost)": {
+      "qini_auc": 0.0304,
+      "observed_uplift_at_20": 0.1315,
+      "true_saved_top20": 56.0,
+      "segments_top20": {
+        "persuadable": 187,
+        "m2m_other": 74,
+        "lost_cause": 21
+      }
+    },
+    "Churn risk (Random Forest)": {
+      "qini_auc": 0.04,
+      "observed_uplift_at_20": 0.1271,
+      "true_saved_top20": 58.2,
+      "segments_top20": {
+        "persuadable": 188,
+        "lost_cause": 56,
+        "m2m_other": 38
+      }
+    },
+    "Random": {
+      "qini_auc": 0.0019,
+      "observed_uplift_at_20": 0.0495,
+      "true_saved_top20": 19.8,
+      "segments_top20": {
+        "persuadable": 86,
+        "contract": 63,
+        "m2m_other": 58,
+        "sleeping_dog": 48,
+        "lost_cause": 27
+      }
+    }
+  },
+  "qini_curves": {
+    "T-learner (Logistic Regression)": [
+      {
+        "pct": 0.0,
+        "qini": 0.0
+      },
+      {
+        "pct": 5.0,
+        "qini": -0.33
+      },
+      {
+        "pct": 9.9,
+        "qini": 3.48
+      },
+      {
+        "pct": 15.0,
+        "qini": 6.04
+      },
+      {
+        "pct": 20.0,
+        "qini": 16.04
+      },
+      {
+        "pct": 25.0,
+        "qini": 16.04
+      },
+      {
+        "pct": 30.0,
+        "qini": 19.5
+      },
+      {
+        "pct": 35.0,
+        "qini": 21.12
+      },
+      {
+        "pct": 40.0,
+        "qini": 27.01
+      },
+      {
+        "pct": 45.0,
+        "qini": 36.2
+      },
+      {
+        "pct": 50.0,
+        "qini": 35.19
+      },
+      {
+        "pct": 55.0,
+        "qini": 37.88
+      },
+      {
+        "pct": 60.0,
+        "qini": 36.05
+      },
+      {
+        "pct": 65.0,
+        "qini": 36.98
+      },
+      {
+        "pct": 70.0,
+        "qini": 38.26
+      },
+      {
+        "pct": 75.0,
+        "qini": 35.67
+      },
+      {
+        "pct": 80.0,
+        "qini": 36.25
+      },
+      {
+        "pct": 85.0,
+        "qini": 32.39
+      },
+      {
+        "pct": 90.0,
+        "qini": 26.85
+      },
+      {
+        "pct": 95.0,
+        "qini": 26.52
+      },
+      {
+        "pct": 100.0,
+        "qini": 31.27
+      }
+    ],
+    "Churn risk (Random Forest)": [
+      {
+        "pct": 0.0,
+        "qini": 0.0
+      },
+      {
+        "pct": 5.0,
+        "qini": 5.47
+      },
+      {
+        "pct": 10.0,
+        "qini": 6.95
+      },
+      {
+        "pct": 15.0,
+        "qini": 17.17
+      },
+      {
+        "pct": 20.0,
+        "qini": 20.5
+      },
+      {
+        "pct": 25.0,
+        "qini": 18.9
+      },
+      {
+        "pct": 30.0,
+        "qini": 14.84
+      },
+      {
+        "pct": 35.1,
+        "qini": 21.07
+      },
+      {
+        "pct": 40.0,
+        "qini": 24.04
+      },
+      {
+        "pct": 45.1,
+        "qini": 31.34
+      },
+      {
+        "pct": 50.0,
+        "qini": 37.58
+      },
+      {
+        "pct": 55.0,
+        "qini": 48.96
+      },
+      {
+        "pct": 60.0,
+        "qini": 46.33
+      },
+      {
+        "pct": 65.0,
+        "qini": 45.86
+      },
+      {
+        "pct": 70.0,
+        "qini": 45.7
+      },
+      {
+        "pct": 75.0,
+        "qini": 45.18
+      },
+      {
+        "pct": 80.0,
+        "qini": 37.81
+      },
+      {
+        "pct": 85.0,
+        "qini": 34.91
+      },
+      {
+        "pct": 90.0,
+        "qini": 34.48
+      },
+      {
+        "pct": 95.0,
+        "qini": 31.03
+      },
+      {
+        "pct": 100.0,
+        "qini": 31.27
+      }
+    ],
+    "Random": [
+      {
+        "pct": 0.0,
+        "qini": 0.0
+      },
+      {
+        "pct": 5.0,
+        "qini": 4.5
+      },
+      {
+        "pct": 9.9,
+        "qini": 4.73
+      },
+      {
+        "pct": 15.0,
+        "qini": 7.63
+      },
+      {
+        "pct": 19.9,
+        "qini": 6.44
+      },
+      {
+        "pct": 25.0,
+        "qini": 8.52
+      },
+      {
+        "pct": 30.0,
+        "qini": 8.45
+      },
+      {
+        "pct": 35.0,
+        "qini": 11.61
+      },
+      {
+        "pct": 40.0,
+        "qini": 13.27
+      },
+      {
+        "pct": 45.0,
+        "qini": 16.55
+      },
+      {
+        "pct": 50.0,
+        "qini": 19.95
+      },
+      {
+        "pct": 54.9,
+        "qini": 22.53
+      },
+      {
+        "pct": 60.0,
+        "qini": 26.68
+      },
+      {
+        "pct": 64.9,
+        "qini": 23.74
+      },
+      {
+        "pct": 70.0,
+        "qini": 21.06
+      },
+      {
+        "pct": 74.9,
+        "qini": 17.49
+      },
+      {
+        "pct": 80.0,
+        "qini": 22.28
+      },
+      {
+        "pct": 85.0,
+        "qini": 25.39
+      },
+      {
+        "pct": 90.0,
+        "qini": 29.29
+      },
+      {
+        "pct": 95.0,
+        "qini": 26.76
+      },
+      {
+        "pct": 100.0,
+        "qini": 31.27
+      }
+    ]
+  },
+  "gain_curves": {
+    "T-learner (Logistic Regression)": [
+      {
+        "pct": 0,
+        "saved": 0.0
+      },
+      {
+        "pct": 5,
+        "saved": 15.7
+      },
+      {
+        "pct": 10,
+        "saved": 28.6
+      },
+      {
+        "pct": 15,
+        "saved": 40.5
+      },
+      {
+        "pct": 20,
+        "saved": 50.9
+      },
+      {
+        "pct": 25,
+        "saved": 62.4
+      },
+      {
+        "pct": 30,
+        "saved": 70.3
+      },
+      {
+        "pct": 35,
+        "saved": 78.0
+      },
+      {
+        "pct": 40,
+        "saved": 84.6
+      },
+      {
+        "pct": 45,
+        "saved": 88.4
+      },
+      {
+        "pct": 50,
+        "saved": 90.2
+      },
+      {
+        "pct": 55,
+        "saved": 93.7
+      },
+      {
+        "pct": 60,
+        "saved": 96.1
+      },
+      {
+        "pct": 65,
+        "saved": 96.5
+      },
+      {
+        "pct": 70,
+        "saved": 95.2
+      },
+      {
+        "pct": 75,
+        "saved": 93.9
+      },
+      {
+        "pct": 80,
+        "saved": 93.3
+      },
+      {
+        "pct": 85,
+        "saved": 92.9
+      },
+      {
+        "pct": 90,
+        "saved": 92.9
+      },
+      {
+        "pct": 95,
+        "saved": 92.6
+      },
+      {
+        "pct": 100,
+        "saved": 91.6
+      }
+    ],
+    "Churn risk (Random Forest)": [
+      {
+        "pct": 0,
+        "saved": 0.0
+      },
+      {
+        "pct": 5,
+        "saved": 19.6
+      },
+      {
+        "pct": 10,
+        "saved": 34.7
+      },
+      {
+        "pct": 15,
+        "saved": 48.8
+      },
+      {
+        "pct": 20,
+        "saved": 58.2
+      },
+      {
+        "pct": 25,
+        "saved": 67.3
+      },
+      {
+        "pct": 30,
+        "saved": 72.7
+      },
+      {
+        "pct": 35,
+        "saved": 80.0
+      },
+      {
+        "pct": 40,
+        "saved": 87.2
+      },
+      {
+        "pct": 45,
+        "saved": 90.2
+      },
+      {
+        "pct": 50,
+        "saved": 92.7
+      },
+      {
+        "pct": 55,
+        "saved": 95.5
+      },
+      {
+        "pct": 60,
+        "saved": 96.8
+      },
+      {
+        "pct": 65,
+        "saved": 97.7
+      },
+      {
+        "pct": 70,
+        "saved": 97.7
+      },
+      {
+        "pct": 75,
+        "saved": 97.4
+      },
+      {
+        "pct": 80,
+        "saved": 96.8
+      },
+      {
+        "pct": 85,
+        "saved": 95.5
+      },
+      {
+        "pct": 90,
+        "saved": 94.4
+      },
+      {
+        "pct": 95,
+        "saved": 93.3
+      },
+      {
+        "pct": 100,
+        "saved": 91.6
+      }
+    ],
+    "Random": [
+      {
+        "pct": 0,
+        "saved": 0.0
+      },
+      {
+        "pct": 5,
+        "saved": 5.4
+      },
+      {
+        "pct": 10,
+        "saved": 10.7
+      },
+      {
+        "pct": 15,
+        "saved": 15.3
+      },
+      {
+        "pct": 20,
+        "saved": 19.8
+      },
+      {
+        "pct": 25,
+        "saved": 25.1
+      },
+      {
+        "pct": 30,
+        "saved": 28.3
+      },
+      {
+        "pct": 35,
+        "saved": 33.4
+      },
+      {
+        "pct": 40,
+        "saved": 39.1
+      },
+      {
+        "pct": 45,
+        "saved": 42.5
+      },
+      {
+        "pct": 50,
+        "saved": 46.5
+      },
+      {
+        "pct": 55,
+        "saved": 51.0
+      },
+      {
+        "pct": 60,
+        "saved": 55.4
+      },
+      {
+        "pct": 65,
+        "saved": 59.8
+      },
+      {
+        "pct": 70,
+        "saved": 63.6
+      },
+      {
+        "pct": 75,
+        "saved": 67.7
+      },
+      {
+        "pct": 80,
+        "saved": 72.1
+      },
+      {
+        "pct": 85,
+        "saved": 76.3
+      },
+      {
+        "pct": 90,
+        "saved": 81.9
+      },
+      {
+        "pct": 95,
+        "saved": 86.4
+      },
+      {
+        "pct": 100,
+        "saved": 91.6
+      }
+    ]
+  },
+  "uplift_by_decile": {
+    "1": 5.39,
+    "2": 18.63,
+    "3": 4.27,
+    "4": 9.98,
+    "5": 10.87,
+    "6": 1.35,
+    "7": -0.06,
+    "8": 4.0,
+    "9": -8.58,
+    "10": 4.41
+  }
+}

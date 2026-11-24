@@ -1,0 +1,41 @@
+# ---------- Python ----------
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---------- Node / frontend ----------
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ---------- Secrets ----------
+.env
+.env.*
+!.env.example
+
+# ---------- Data (raw data is downloaded by a script, never committed) ----------
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*.csv
+data/processed/*.parquet
+*.zip
+
+# ---------- Large model files ----------
+# Small saved models (<10 MB) ARE committed so the backend can load them.
+# Anything larger should be ignored:
+*.h5
+*.pt
+*.ckpt
+
+# ---------- Editor / OS ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------- Local database (created automatically) ----------
+backend/data/*.db
+.design-backup/

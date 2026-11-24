@@ -1,0 +1,21 @@
+myDel churn + uplift training run  2026-11-19 20:34
+
+===== python ml/download_data.py =====
+Already downloaded: C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\data\raw\telco_churn.csv
+(done in 0 s)
+
+===== python ml/preprocess.py =====
+Raw shape:   (7043, 21)
+Clean shape: (7043, 21)
+Missing values after cleaning: 0
+Churn rate: 26.5%
+Saved to C:\Users\Devansh Datta\Desktop\PROECTS\amlproject\churn-uplift\data\processed\telco_clean.csv
+(done in 3 s)
+
+===== python ml/train_classical.py =====
+  opt_res = optimize.minimize(
+  opt_res = optimize.minimize(
+  opt_res = optimize.minimize(
+  opt_res = optimize.minimize(
+  opt_res = optimize.minimize(
+  opt_res = optimize.minimize(
